@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -62,9 +63,19 @@ public class ExtensionDeserializer extends StdDeserializer<Extension>
     if (p.currentName().equals(Vulnerability10.VULNERABILITIES)) {
       if (p instanceof FromXmlParser) {
         return processVulnerabilities(p);
+      } else {
+        return processJsonVulnerabilities(p);
       }
     }
     return null;
+  }
+
+  private Extension processJsonVulnerabilities(final JsonParser parser) throws IOException {
+    Vulnerability10[] vulns = parser.readValueAs(Vulnerability10[].class);
+    Extension ext = new Extension();
+    ext.setExtensions(Arrays.asList(vulns));
+
+    return ext;
   }
 
   private Extension processVulnerabilities(final JsonParser parser) throws IOException {

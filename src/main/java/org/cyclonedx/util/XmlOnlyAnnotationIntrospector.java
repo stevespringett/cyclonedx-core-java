@@ -16,14 +16,19 @@
  * SPDX-License-Identifier: Apache-2.0
  * Copyright (c) Steve Springett. All Rights Reserved.
  */
-package org.cyclonedx.model;
+package org.cyclonedx.util;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
+import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
+import org.cyclonedx.model.XmlOnly;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface JsonOnly {
+public class XmlOnlyAnnotationIntrospector extends JacksonAnnotationIntrospector
+{
+  @Override
+  public boolean hasIgnoreMarker(final AnnotatedMember m) {
+    if (m.hasAnnotation(XmlOnly.class)) {
+      return true;
+    }
+    return super.hasIgnoreMarker(m);
+  }
 }

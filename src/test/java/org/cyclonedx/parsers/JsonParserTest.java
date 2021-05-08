@@ -155,6 +155,14 @@ public class JsonParserTest {
         Assert.assertNull(d11.getDependencies());
     }
 
+    @Test
+    public void testValid12BomWithVulnerabilities() throws Exception {
+        final byte[] bomBytes = IOUtils.toByteArray(this.getClass().getResourceAsStream("/bom-1.2-vulnerability.json"));
+        final JsonParser parser = new JsonParser();
+        final Bom bom = parser.parse(bomBytes);
+        Assert.assertNotNull(bom);
+    }
+
     private void testPedigree(final Component component) {
         Assert.assertNotNull(component.getPedigree());
         Assert.assertNotNull(component.getPedigree().getAncestors());

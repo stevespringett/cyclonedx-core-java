@@ -24,6 +24,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
@@ -39,12 +40,15 @@ import org.cyclonedx.model.vulnerability.Vulnerability10.Recommendation;
 public class ExtensionSerializer
     extends StdSerializer<Extension>
 {
+  private ObjectMapper mapper;
+
   public ExtensionSerializer() {
     this(null);
   }
 
   public ExtensionSerializer(final Class<Extension> t) {
     super(t);
+    this.mapper = new ObjectMapper();
   }
 
   @Override
@@ -59,8 +63,14 @@ public class ExtensionSerializer
         catch (XMLStreamException e) {
           throw new IOException(e);
         }
+      } else {
+        serializeVulnerabilitiesToJson(gen, value);
       }
     }
+  }
+
+  private void serializeVulnerabilitiesToJson(final JsonGenerator gen, final Extension vulns) throws IOException {
+    mapper.writeValue(gen, vulns.getExtensions());
   }
 
   private void serializeVulnerabilities(final ToXmlGenerator gen, final Extension vulns)

@@ -22,9 +22,13 @@ import java.util.List;
 
 public class ExtensibleType extends ExtensibleElement {
 
+    @XmlOnly
     private final String namespace;
+    @XmlOnly
     private final String name;
+    @XmlOnly
     private List<Attribute> attributes;
+    @XmlOnly
     private String value;
 
     public ExtensibleType(

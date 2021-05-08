@@ -47,6 +47,17 @@ public class BomJsonGeneratorTest {
     }
 
     @Test
+    public void schema12GenerationTestWithVulns() throws Exception {
+        Bom bom = createCommonBom("/bom-1.2-vulnerability.xml");
+        BomJsonGenerator generator = BomGeneratorFactory.createJson(Version.VERSION_12, bom);
+        Assert.assertTrue(generator instanceof BomJsonGenerator12);
+        Assert.assertEquals(CycloneDxSchema.Version.VERSION_12, generator.getSchemaVersion());
+        File file = writeToFile(generator.toJsonString());
+        JsonParser parser = new JsonParser();
+        Assert.assertTrue(parser.isValid(file, CycloneDxSchema.Version.VERSION_12, true));
+    }
+
+    @Test
     public void schema12JsonObjectGenerationTest() throws Exception {
         Bom bom = createCommonBom("/bom-1.2.xml");
         BomJsonGenerator generator = BomGeneratorFactory.createJson(Version.VERSION_12, bom);

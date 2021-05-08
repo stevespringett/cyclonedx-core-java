@@ -30,6 +30,8 @@ import org.cyclonedx.util.CollectionTypeSerializer;
 import org.cyclonedx.util.ComponentWrapperSerializer;
 import org.cyclonedx.util.LicenseChoiceSerializer;
 import org.cyclonedx.util.TrimStringSerializer;
+import org.cyclonedx.util.VersionAnnotationIntrospector;
+import org.cyclonedx.util.XmlOnlyAnnotationIntrospector;
 
 abstract class AbstractBomJsonGenerator extends CycloneDxSchema implements BomJsonGenerator {
 
@@ -53,6 +55,9 @@ abstract class AbstractBomJsonGenerator extends CycloneDxSchema implements BomJs
         SimpleModule licenseModule = new SimpleModule();
         SimpleModule depModule = new SimpleModule();
         SimpleModule componentWrapperModule = new SimpleModule();
+
+        mapper.setAnnotationIntrospector(
+            new XmlOnlyAnnotationIntrospector());
 
         SimpleModule stringModule = new SimpleModule();
         stringModule.addSerializer(new TrimStringSerializer());
